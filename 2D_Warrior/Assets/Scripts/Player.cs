@@ -23,11 +23,32 @@ public class Player : MonoBehaviour
     private Rigidbody2D Rig;
     private Animator Ani;
 
-
-    private void Move(string direction , int speed = 100 )
+    private void Start()
     {
-        print("移動方向:" + direction);
-        print("移動速度:" + speed);
+        //GetComponent<泛型>
+        //泛型:泛指所有類型
+        //EX:<Rigidbody2D>,<AudioSource>,<Animator>
+
+        //剛體欄位=取得原件<剛體>()
+        Rig = GetComponent<Rigidbody2D>();
+
+
+        
+
+        Jump();
+        Jump(200);
+
+        Shoot("右邊", "咻咻咻");
+        Shoot("左邊", "咻咻嘿");
+
+    }
+
+    private void Move()
+    {
+        //剛體.加速度 = 二維 (水平*速度,0,元件原本的Y軸)
+        Rig.velocity = new Vector2(h *MoveSpeed, Rig.velocity.y);
+        
+       
     }
     private void Jump(int height = 100)
     {
@@ -47,21 +68,26 @@ public class Player : MonoBehaviour
     {
     }
 
-    private void Start()
+   
+       
+        
+    //取得水平軸向
+    private void GetHorizontal()
     {
-        Move("右邊", 150);
-        Move("左邊", 150);
-
-        Jump();
-        Jump(200);
-
-        Shoot("右邊", "咻咻咻");
-        Shoot("左邊", "咻咻嘿");
-
-
+        //輸入.取得軸向(水平)
+        h = Input.GetAxis("Horizontal");
 
     }
+    
+    //取得玩家水平軸向的值
+    public float h;
 
+    
+    private void Update()
+    {
+        GetHorizontal();
+        Move();
+    }
 
 
 }

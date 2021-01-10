@@ -18,6 +18,11 @@ public class Player : MonoBehaviour
     public AudioClip Fire;
     [Header("血量"), Range(0, 200)]
     public float HP = 100;
+    [Header("地面判定位移")]
+    public Vector3 offset;
+    [Header("地面判定半徑")]
+    public float radius = 0.3f;
+
 
     private AudioSource Aud;
     private Rigidbody2D Rig;
@@ -47,6 +52,15 @@ public class Player : MonoBehaviour
         GetHorizontal();
         Move();
         Jump();
+
+    }
+    private void OnDrawGizmos()
+    {
+        //圖示.顏色(指定顏色)
+        Gizmos.color = new Color(1, 0, 0, 0.4f);
+        //圖示.繪製球體(中心點.半徑)
+        Gizmos.DrawSphere(transform.position+offset,radius);
+        
 
     }
     /// <summary>
@@ -82,12 +96,27 @@ public class Player : MonoBehaviour
         if (OnTheGround && Input.GetKeyDown(KeyCode.Space))
         {
             Rig.AddForce(new Vector2(0, JumpHeight));     //剛體.添加推力(二維向量)
+            Ani.SetTrigger("跳躍觸發");                          
+        }
+        Collider2D hit = Physics2D.OverlapCircle(transform.position+ offset,radius,1<<9);
+        //如果 碰到的物件 存在 就將 是否在地面上設定為 是
+        if (hit)
+        {
+            OnTheGround = true;
+        }
+        //否則 沒有碰到物件 就將 是否在地面上設定為 否
+        else
+        {
             OnTheGround = false;
         }
 
+        Ani.SetFloat("跳躍",Rig.velocity.y);          //動畫控制器.設定浮點數(參數.值)
+        Ani.SetBool("是否在地面上", OnTheGround);
+
+
     }
-    
-       
+
+
 
     private void Shoot(string direction, string sound)
     {

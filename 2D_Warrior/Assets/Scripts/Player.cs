@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     public Vector3 offset;
     [Header("地面判定半徑")]
     public float radius = 0.3f;
+    [Header("鑰匙音效")]
+    public AudioClip Soundkey;
 
 
     private AudioSource Aud;
@@ -37,22 +39,16 @@ public class Player : MonoBehaviour
         //剛體欄位=取得原件<剛體>()
         Rig = GetComponent<Rigidbody2D>();
         Ani = GetComponent<Animator>();
-
-
-
-
-
-
-        Shoot("右邊", "咻咻咻");
-        Shoot("左邊", "咻咻嘿");
-
-    }
+        Aud = GetComponent<AudioSource>();
+        
+             }
     private void Update()
     {
         GetHorizontal();
         Move();
         Jump();
-
+        Shoot();
+        
     }
     private void OnDrawGizmos()
     {
@@ -61,8 +57,23 @@ public class Player : MonoBehaviour
         //圖示.繪製球體(中心點.半徑)
         Gizmos.DrawSphere(transform.position+offset,radius);
         
-
     }
+    /// <summary>
+    /// 觸發事件:進入時觸發一次
+    /// </summary>
+    /// <param name="collision">碰到的物件資訊</param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+       //如果  碰到的標籤  為  鑰匙
+        if (collision.tag=="鑰匙")
+        {
+            //刪除  (一定要放 Gameobject)
+           Destroy(collision.gameObject);
+           Aud.PlayOneShot(Soundkey, Random.Range(1.2f, 1.8f));
+
+        }
+    }
+
     /// <summary>
     /// 移動
     /// </summary>
@@ -117,16 +128,24 @@ public class Player : MonoBehaviour
     }
 
 
-
-    private void Shoot(string direction, string sound)
+    /// <summary>
+    /// 開槍
+    /// </summary>
+    private void Shoot()
     {
-        print("開槍方向:" + direction);
-        print("開槍音效:" + sound);
+        if (Input.GetKeyDown(KeyCode.Mouse0))                       //如果按下左鍵.手機為觸控
+        {
+            //音效來源.播放一次音效(音效片段.音量)
+            Aud.PlayOneShot(Fire, Random.Range(1.2f, 2.1f));
+            //暫存物件 名稱 = 生成(物件,座標,角度)
+            GameObject Temp =Instantiate(Bullets, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
+            //暫存物件.取得元件<剛體>().添加推力(生成點右邊*子彈速度+生成點上方*高度)
+            Temp.GetComponent<Rigidbody2D>().AddForce(BulletSpawnPoint.right * BulletSpeed+ BulletSpawnPoint.up * 200);
+        }
     }
-    private void Hurt(int bygun = 20, int bytouch = 10)
+    private void Damage(float getDamage)
     {
-        print("被槍攻擊:" + bygun);
-        print("被接觸:" + bytouch);
+       
     }
     private void Die()
     {

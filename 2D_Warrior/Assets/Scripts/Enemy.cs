@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;                  //引用UI
+using UnityEngine.Events;              //引用事件API
+using System.Collections;              //引用系統.整合API
+
 //第一次套用腳本時執行
 //添加元件(類型(元件),(類型(元件),(類型(元件)....
 [RequireComponent(typeof(AudioSource), typeof(Rigidbody2D), typeof(CapsuleCollider2D))]
@@ -14,12 +17,20 @@ public class Enemy : MonoBehaviour
     public float Atkrange = 5;
     [Header("攻擊力"), Range(0, 1000)]
     public float Atk = 10;
+    [Header("攻擊冷卻"), Range(0, 10)]
+    public float AtkCD = 2.5f;
+    [Header("攻擊延遲傳送傷害"), Range(0, 10)]
+    public float Atkdelay = 0.7f;
     [Header("血量"), Range(0, 5000)]
     public float HP = 2500;
     [Header("血量文字")]
     public Text textHp;
     [Header("血量圖片")]
     public Image imgHP;
+    [Header("攻擊範圍位移")]
+    public Vector3 offsetAttack;
+    [Header("攻擊範圍大小")]
+    public Vector3 sizeAttack;
 
 
     private Animator Ani;
@@ -27,6 +38,11 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D Rig;
     private float hpmax;
     private Player player;
+    private float timer;
+    private CameraController2D cam;
+
+    public UnityEvent onDead;
+
 
     private void Start()
     {
@@ -35,11 +51,22 @@ public class Enemy : MonoBehaviour
         Rig = GetComponent<Rigidbody2D>();
         hpmax = HP;
         player = FindObjectOfType<Player>();          //透過類型尋找腳本<類型>  ---不能是重複腳本
+        cam = FindObjectOfType<CameraController2D>();
+
     }
+
 
     private void Update()
     {
+        if (Ani.GetBool("死亡開關")) return;           //如果 死亡開關 已勾選 就跳出
         Move();
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.DrawCube(transform.position +transform.right*offsetAttack.x+transform.up*offsetAttack.y , sizeAttack);
 
     }
 
@@ -54,6 +81,8 @@ public class Enemy : MonoBehaviour
     }
     private void Dead()
     {
+        onDead.Invoke();                      //觸發死亡事件
+
         HP = 0;
         textHp.text = 0.ToString();
         Ani.SetBool("死亡開關",true);
@@ -106,9 +135,40 @@ public class Enemy : MonoBehaviour
     /// 攻擊冷卻與行為
     /// </summary>
     private void Attack()
+
     {
         Rig.velocity = Vector3.zero;
-        Ani.SetTrigger("攻擊觸發");
+
+        if (timer < AtkCD)                       //如果計時器<攻擊冷卻
+        {
+            timer += Time.deltaTime;           //累加計時器
+        }
+        else                                   //否則計時器>=攻擊冷卻
+        {
+            Ani.SetTrigger("攻擊觸發");        //攻擊
+            timer = 0;                         //計時器歸零
+
+            StartCoroutine(DelaySendDamage());
+        }
+     }
+       /// <summary>
+       /// 延遲傳送傷害
+       /// </summary>
+     private IEnumerator DelaySendDamage()
+        {
+        //等待延遲時間
+        yield return new WaitForSeconds(Atkdelay);
+        //碰撞物件=2d物理.盒型覆蓋區域(中心點.角度.尺寸.圖層)
+        Collider2D hit = Physics2D.OverlapBox(transform.position + transform.right * offsetAttack.x + transform.up * offsetAttack.y, sizeAttack, 0, 1 << 10);
+        //如果 碰到物件 存在 玩家.受傷(攻擊力)
+        if (hit) player.Damage(Atk);
+        StartCoroutine(cam.shakeCamera());
+
+        }
+
+       
+
+
 
     }
 
@@ -117,7 +177,7 @@ public class Enemy : MonoBehaviour
 
 
 
-}
+
 
    
 

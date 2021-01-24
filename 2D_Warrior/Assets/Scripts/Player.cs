@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour
         Rig = GetComponent<Rigidbody2D>();
         Ani = GetComponent<Animator>();
         Aud = GetComponent<AudioSource>();
+        hpmax = HP;
         
              }
     private void Update()
@@ -147,12 +149,30 @@ public class Player : MonoBehaviour
             Temp.AddComponent<Bullets>().attack = BulletDamage;
         }
     }
-    private void Damage(float getDamage)
+
+    [Header("血量文字1")]
+    public Text textHp;
+    [Header("血量")]
+    public Image imgHP;
+
+    private float hpmax;
+
+    public void Damage(float getDamage)
     {
-       
+        HP -= getDamage;                        //遞減
+        textHp.text = HP.ToString();         //血量文字.文字內容=血量.轉字串() 
+        imgHP.fillAmount = HP / hpmax;       //血量圖片.血量長度=目前血量/最大血量
+
+        if (HP <= 0) Dead();                 //如果血量小於等於0,死亡
     }
-    private void Die()
+    private void Dead()
     {
+        HP = 0;
+        textHp.text = 0.ToString();
+        Ani.SetBool("死亡開關", true);
+        enabled = false;
+        transform.Find("槍").gameObject.SetActive(false);
+
     }
 
 

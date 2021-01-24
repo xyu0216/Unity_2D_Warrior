@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
     [Header("移動速度"), Range(0, 1000)]
     public float MoveSpeed = 10.5f;
     [Header("跳躍高度"), Range(0, 3000)]
-    public int JumpHeight = 100;
+    public int JumpHeight = 1000;
     [Header("是否在地面上"), Tooltip("是否在地面上")]
     public bool OnTheGround = false;
     [Header("子彈")]
@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public Transform BulletSpawnPoint;
     [Header("子彈速度"), Range(0, 5000)]
     public int BulletSpeed = 800;
+    [Header("子彈傷害"), Range(0, 5000)]
+    public float BulletDamage =50;
     [Header("開槍音效")]
     public AudioClip Fire;
     [Header("血量"), Range(0, 200)]
@@ -141,6 +143,8 @@ public class Player : MonoBehaviour
             GameObject Temp =Instantiate(Bullets, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
             //暫存物件.取得元件<剛體>().添加推力(生成點右邊*子彈速度+生成點上方*高度)
             Temp.GetComponent<Rigidbody2D>().AddForce(BulletSpawnPoint.right * BulletSpeed+ BulletSpawnPoint.up * 200);
+
+            Temp.AddComponent<Bullets>().attack = BulletDamage;
         }
     }
     private void Damage(float getDamage)

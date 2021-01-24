@@ -18,7 +18,8 @@ public class Bullets : MonoBehaviour
         {
             //對Enemy呼叫Damage(攻擊力)
             collision.gameObject.GetComponent<Enemy>().Damage(attack);
-        }
-    }
 
+        }
+        Destroy(gameObject);
+    }
 }

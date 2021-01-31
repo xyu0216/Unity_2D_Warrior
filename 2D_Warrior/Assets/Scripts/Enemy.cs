@@ -42,6 +42,8 @@ public class Enemy : MonoBehaviour
     private CameraController2D cam;
 
     public UnityEvent onDead;
+    private bool IsSecond;
+    private ParticleSystem PsSecond;
 
 
     private void Start()
@@ -52,6 +54,7 @@ public class Enemy : MonoBehaviour
         hpmax = HP;
         player = FindObjectOfType<Player>();          //透過類型尋找腳本<類型>  ---不能是重複腳本
         cam = FindObjectOfType<CameraController2D>();
+        PsSecond = GameObject.Find("骷髏二階段攻擊特效").GetComponent<ParticleSystem>();
 
     }
 
@@ -68,6 +71,8 @@ public class Enemy : MonoBehaviour
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         Gizmos.DrawCube(transform.position +transform.right*offsetAttack.x+transform.up*offsetAttack.y , sizeAttack);
 
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawSphere(transform.position, Atkrange);
     }
 
     public void Damage(float damage)
@@ -76,6 +81,13 @@ public class Enemy : MonoBehaviour
         Ani.SetTrigger("受傷觸發");          //受傷動畫
         textHp.text = HP.ToString();         //血量文字.文字內容=血量.轉字串() 
         imgHP.fillAmount = HP / hpmax;       //血量圖片.血量長度=目前血量/最大血量
+
+        if (HP <= hpmax * 0.75)
+        {
+            Atkrange = 20;
+            IsSecond = true;
+        }
+           
 
         if (HP <= 0) Dead();                 //如果血量小於等於0,死亡
     }
@@ -97,6 +109,9 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Move()
     {
+        AnimatorStateInfo Info = Ani.GetCurrentAnimatorStateInfo(0);
+        if (Info.IsName("骷髏攻擊") || Info.IsName("骷髏受傷")) return;
+
         /*   判斷式寫法
         if (transform.position.x > player.transform.position.x)
         {
@@ -164,6 +179,8 @@ public class Enemy : MonoBehaviour
         if (hit) player.Damage(Atk);
         StartCoroutine(cam.shakeCamera());
 
+
+        if (IsSecond) PsSecond.Play();
         }
 
        

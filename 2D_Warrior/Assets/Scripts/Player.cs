@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
+
+
     [Header("移動速度"), Range(0, 1000)]
     public float MoveSpeed = 10.5f;
     [Header("跳躍高度"), Range(0, 3000)]
@@ -27,11 +30,15 @@ public class Player : MonoBehaviour
     public float radius = 0.3f;
     [Header("鑰匙音效")]
     public AudioClip Soundkey;
+    [Header("結束畫面")]
+    public GameObject panelGameover;
 
 
     private AudioSource Aud;
     private Rigidbody2D Rig;
     private Animator Ani;
+    private SpriteRenderer Spr;
+
 
     private void Start()
     {
@@ -43,6 +50,7 @@ public class Player : MonoBehaviour
         Rig = GetComponent<Rigidbody2D>();
         Ani = GetComponent<Animator>();
         Aud = GetComponent<AudioSource>();
+        Spr = GetComponent<SpriteRenderer>();
         hpmax = HP;
         
              }
@@ -157,21 +165,47 @@ public class Player : MonoBehaviour
 
     private float hpmax;
 
+    /// <summary>
+    /// 受傷
+    /// </summary>
+    /// <param name="getDamage"></param>
     public void Damage(float getDamage)
     {
         HP -= getDamage;                        //遞減
         textHp.text = HP.ToString();         //血量文字.文字內容=血量.轉字串() 
         imgHP.fillAmount = HP / hpmax;       //血量圖片.血量長度=目前血量/最大血量
-
+        StartCoroutine(DamageEffect());
         if (HP <= 0) Dead();                 //如果血量小於等於0,死亡
+               
     }
+
+    private IEnumerator DamageEffect()
+    {
+        Color red = new Color(1, 0.1f, 0.1f);
+        float interval = 0.05f;
+
+        for (int i = 0; i < 5; i++)
+        {
+            Spr.color = red;
+            yield return new WaitForSeconds(interval);
+            Spr.color = Color.white;
+            yield return new WaitForSeconds(interval);
+        }
+
+     }
+
+    /// <summary>
+    /// 死亡
+    /// </summary>
     private void Dead()
     {
+        panelGameover.SetActive(true);
         HP = 0;
         textHp.text = 0.ToString();
         Ani.SetBool("死亡開關", true);
         enabled = false;
         transform.Find("槍").gameObject.SetActive(false);
+        Rig.Sleep();
 
     }
 

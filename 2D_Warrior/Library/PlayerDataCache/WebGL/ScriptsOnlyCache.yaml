@@ -14,8 +14,6 @@ ScriptsOnlyBuild:
     - TeleportManager
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -26,7 +24,6 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateMachineInspector
     - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
@@ -44,8 +41,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Shadow
     - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
-    com.unity.multiplayer-hlapi.Runtime.dll:
-    - UnityEngine.Networking.NetworkCallbacks
   sceneClasses:
     "Assets/\u904A\u6232\u5834\u666F.unity":
     - Class: 1
@@ -111,21 +106,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12808}
     - Class: 114
-      Script: {instanceID: 13464}
+      Script: {instanceID: 13324}
     - Class: 114
-      Script: {instanceID: 13674}
+      Script: {instanceID: 13466}
     - Class: 114
-      Script: {instanceID: 13848}
+      Script: {instanceID: 13676}
     - Class: 114
-      Script: {instanceID: 13982}
+      Script: {instanceID: 13850}
     - Class: 114
-      Script: {instanceID: 14010}
+      Script: {instanceID: 13984}
     - Class: 114
-      Script: {instanceID: 14022}
+      Script: {instanceID: 14012}
     - Class: 114
-      Script: {instanceID: 14062}
+      Script: {instanceID: 14024}
     - Class: 114
-      Script: {instanceID: 18442}
+      Script: {instanceID: 14064}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -208,11 +203,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12808}
     - Class: 114
-      Script: {instanceID: 13464}
+      Script: {instanceID: 13466}
     - Class: 114
-      Script: {instanceID: 13890}
+      Script: {instanceID: 13892}
     - Class: 114
-      Script: {instanceID: 13982}
+      Script: {instanceID: 13984}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -714,6 +709,12 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
+      Hash: 6d1f10da7db04a6c3fe8eefa10d9ebf1
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Bosstrigger
+  - hash:
+      serializedVersion: 2
       Hash: 24c74cc0d527a06113f2b967042769f0
     assemblyName: UnityEngine.XR.LegacyInputHelpers.dll
     namespaceName: UnityEditor.XR.LegacyInputHelpers
@@ -928,12 +929,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 6d1f10da7db04a6c3fe8eefa10d9ebf1
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Bosstrigger
   platform: 20
   scenePathNames:
   - "Assets/\u9078\u55AE.unity"

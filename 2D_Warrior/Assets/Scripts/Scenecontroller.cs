@@ -21,8 +21,8 @@ public class Scenecontroller : MonoBehaviour
 
     public void BackToMenu()
     {
+        Time.timeScale = 1;
         aud.PlayOneShot(soundclip,2);
-
         Invoke("DelayBackToMenu", 1.5f);
                 
     }
@@ -31,8 +31,8 @@ public class Scenecontroller : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
+        Time.timeScale = 1;
         aud.PlayOneShot(soundclip,2);
-
         Invoke("DelayQuitGame", 1.5f);
 
     }

@@ -16,11 +16,8 @@ public class Mushroom : MonoBehaviour
     [Header("攻擊延遲傳送傷害"), Range(0, 10)]
     public float Atkdelay = 0.7f;
     [Header("血量"), Range(0, 5000)]
-    public float HP = 2500;
-    [Header("血量文字")]
-    public Text textHp;
-    [Header("血量圖片")]
-    public Image imgHP;
+    public float HP = 250;
+   
     [Header("攻擊範圍位移")]
     public Vector3 offsetAttack;
     [Header("攻擊範圍大小")]
@@ -30,7 +27,7 @@ public class Mushroom : MonoBehaviour
     private Animator Ani;
     private AudioSource Aud;
     private Rigidbody2D Rig;
-    private float hpmax;
+    
     private Player player;
     private float timer;
     private CameraController2D cam;
@@ -40,7 +37,7 @@ public class Mushroom : MonoBehaviour
         Ani = GetComponent<Animator>();
         Aud = GetComponent<AudioSource>();
         Rig = GetComponent<Rigidbody2D>();
-        hpmax = HP;
+     
         player = FindObjectOfType<Player>();            //透過類型尋找腳本<類型>  ---不能是重複腳本
         cam = FindObjectOfType<CameraController2D>();
      }
@@ -63,13 +60,9 @@ public class Mushroom : MonoBehaviour
     {
         HP -= damage;                        //遞減
         Ani.SetTrigger("受傷觸發");          //受傷動畫
-        textHp.text = HP.ToString();         //血量文字.文字內容=血量.轉字串() 
-        imgHP.fillAmount = HP / hpmax;       //血量圖片.血量長度=目前血量/最大血量
+       
 
-        if (HP <= hpmax * 0.75)
-        {
-            Atkrange = 20;
-         }
+        
         if (HP <= 0) Dead();
     }
     private void Dead()
@@ -77,7 +70,7 @@ public class Mushroom : MonoBehaviour
                              //觸發死亡事件
 
         HP = 0;
-        textHp.text = 0.ToString();
+        
         Ani.SetBool("死亡開關", true);
         //取得元件<膠囊碰撞>().啟動= 否
         GetComponent<CapsuleCollider2D>().enabled = false;

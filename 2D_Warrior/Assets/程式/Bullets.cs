@@ -20,6 +20,25 @@ public class Bullets : MonoBehaviour
             collision.gameObject.GetComponent<Enemy>().Damage(attack);
 
         }
+
+        if (collision.gameObject.GetComponent<Mushroom>())
+        {
+            //對Mushroom呼叫Damage(攻擊力)
+            collision.gameObject.GetComponent<Mushroom>().Damage(attack);
+
+        }
+        if (collision.gameObject.GetComponent<FlyingEyes>())
+        {
+            //對Mushroom呼叫Damage(攻擊力)
+            collision.gameObject.GetComponent<FlyingEyes>().Damage(attack);
+
+        }
+        if (collision.gameObject.GetComponent<Goblin>())
+        {
+            //對Mushroom呼叫Damage(攻擊力)
+            collision.gameObject.GetComponent<Goblin>().Damage(attack);
+
+        }
         Destroy(gameObject);
     }
 }

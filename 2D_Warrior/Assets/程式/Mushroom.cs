@@ -5,7 +5,7 @@ using System.Collections;
 public class Mushroom : MonoBehaviour
 {
 
-        [Header("移動速度"), Range(0, 1000)]
+    [Header("移動速度"), Range(0, 1000)]
     public float Speed = 3;
     [Header("攻擊範圍"), Range(0, 100)]
     public float Atkrange = 5;
@@ -61,21 +61,20 @@ public class Mushroom : MonoBehaviour
         HP -= damage;                        //遞減
         Ani.SetTrigger("受傷觸發");          //受傷動畫
        
-
-        
+               
         if (HP <= 0) Dead();
     }
     private void Dead()
     {
-                             //觸發死亡事件
+                          //觸發死亡事件
 
         HP = 0;
         
         Ani.SetBool("死亡開關", true);
         //取得元件<膠囊碰撞>().啟動= 否
         GetComponent<CapsuleCollider2D>().enabled = false;
-        Rig.Sleep();                                             //剛體.睡著
-        Rig.constraints = RigidbodyConstraints2D.FreezeAll;      //剛體.約束=約束.凍結全部
+       // Rig.Sleep();                                             //剛體.睡著
+        //Rig.constraints = RigidbodyConstraints2D.FreezeAll;      //剛體.約束=約束.凍結全部
 
     }
     private void Move()

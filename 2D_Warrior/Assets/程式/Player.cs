@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         Move();
         Jump();
         Shoot();
-        if (transform.position.y < -10)
+        //if (transform.position.y < -10)
         {
             Dead();
         }
